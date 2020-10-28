@@ -1,0 +1,26 @@
+.{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    background-color: azure;
+    color: cadetblue;
+    font-family: sans-serif;
+}
+
+#collapsibleNavbar{
+    max-width: 300px;
+}
+a h1 i{
+    color: cadetblue;
+}
+
+a i{
+    color: white;
+}
+
+span{
+    min-width: 100px;
+}

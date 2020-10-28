@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+<section class="col-10">
+        {% for client in clients %}
+            <div class= "m-3">
+                <span class="col-3 d-flex justify-content-around alert alert-secondary p-1 m-2">
+                    <h3>{{client.name}}</h3>
+                </span>
+                {% if client.lastupdate == true %}
+                    <div class="m-2 alert alert-success">
+                        <strong>Daten aktuell</strong>
+                    </div>
+                {% else %}
+                    <div class="m-2 alert alert-danger">
+                        <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
+                    </div>
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-around mb-3 p-1">
+                {% for measuredValue in measuredValues %}
+                    <div class="mb-2 p-1">
+                        <h4>{{measuredValue.name}}:</h4>
+                        <div class="col-10 alert alert-light p-1">
+                            {% if measuredValue.name == "Temperatur" %}
+                                {{client.temperature}}
+                            {% elseif measuredValue.name == "Luftdruck"%}
+                                {{client.airpresure}}
+                            {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
+                                {{client.humidity}}
+                            {% endif %}
+                            {{measuredValue.unit}}
+                        </div>
+                        <a href="details">
+                            <h1>
+                                <i class="{{measuredValue.icon}}"></i>
+                            </h1>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </section>
+{% endblock %}

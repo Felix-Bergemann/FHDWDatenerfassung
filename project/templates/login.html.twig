@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class= "p-2">
+      <h3>
+        Herzlich Willkommen - Bitte melden Sie sich an:
+      </h3>
+    </div>
+    <section>
+      <div class = "col-6">
+        <form method="post" action="start">
+          <div class="input-group m-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text">User:</span>
+            </div>
+            <input type="text" name = "user" class="form-control">
+          </div>
+          <div class="input-group m-2">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Passwort:</span>
+            </div>
+            <input type = "password" name = "pw" class="form-control">
+          </div>
+          <button type="submit" class="btn btn-primary">Anmelden</button>
+        </form>
+      </div>
+    </section>
+{% endblock %}

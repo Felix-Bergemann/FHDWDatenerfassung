@@ -62,7 +62,12 @@ class MainController extends AbstractController
         $logout->setText('Abmelden');
         $logout->setIcon('fas fa-window-close');
 
-        $navs = [$logout];
+        $syncClient = new Nav();
+        $syncClient->setLink('/clients');
+        $syncClient->setText('Clients zuordnen');
+        $syncClient->setIcon('fa fa-list');
+
+        $navs = [$syncClient, $logout];
         $clients = [$client1, $client2];
 
         return $this->render('start.html.twig', [
@@ -89,6 +94,30 @@ class MainController extends AbstractController
         $navs = [$start, $logout];
 
         return $this->render('details.html.twig', [
+            'navs' =>$navs,
+        ]);
+    }
+
+     /**
+    * @Route("/clients", name="clients")
+    */
+    public function clientsAction(){
+
+        $start = new Nav();
+        $start->setText('Zurück');
+        $start->setIcon('fas fa-arrow-circle-left');
+        $start->setLink('/start');
+        $logout = new Nav();
+        $logout->setLink('/');
+        $logout->setText('Abmelden');
+        $logout->setIcon('fas fa-window-close');
+
+        $navs = [$start, $logout];
+
+        $clients = ['Client 1', 'Client 2', 'Client 3','Client 4'];
+
+        return $this->render('clients.html.twig', [
+            'clients'=> $clients,
             'navs' =>$navs,
         ]);
     }

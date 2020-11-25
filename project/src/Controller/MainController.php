@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Nav;
 use App\Entity\Measured;
 use App\Entity\Client;
+use App\Entity\User;
 
 
 class MainController extends AbstractController
@@ -15,6 +16,11 @@ class MainController extends AbstractController
     * @Route("/")
     */
     public function loginAction(){
+
+        $em =  $this->getDoctrine()->getManager();
+        $clientsRepo = $em->getRepository(User::class);
+        dump($clientsRepo->findAll());
+
         return $this->render('login.html.twig', [
                 'navs' => [],
         ]);
@@ -26,18 +32,9 @@ class MainController extends AbstractController
     public function startAction(){
 
         $client1 = new Client();
-        $client1->setName('Client1');
-        $client1->setLastUpdate(true);
-        $client1->setTemperature('22,1');
-        $client1->setHumidity(12);
-        $client1->setAirPresure(1000);
 
         $client2 = new Client();
-        $client2->setName('Client2');
-        $client2->setLastUpdate(false);
-        $client2->setTemperature('18,5');
-        $client2->setHumidity(27);
-        $client2->setAirPresure(1100);
+
 
         $temperature = new Measured();
         $airPresure = new Measured();

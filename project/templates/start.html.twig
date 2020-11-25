@@ -11,7 +11,7 @@
                 </div>
                 <div class="row">
                     <div class="col-3"></div>
-                    {% if client.lastupdate == true %}
+                    {#{% if client.lastupdate == true %}
                         <div class="col-6 m-2 text-center alert alert-success">
                             <strong>Daten aktuell</strong>
                         </div>
@@ -19,7 +19,7 @@
                         <div class="col-6 m-2 text-center alert alert-danger">
                             <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
                         </div>
-                    {% endif %}
+                    {% endif %}#}
                     <div class="col-3"></div>
                 </div>
                 <div class="d-flex justify-content-around mb-3 p-1">
@@ -27,14 +27,14 @@
                         <div class="text-center mb-2 p-1">
                             <h4>{{measuredValue.name}}:</h4>
                             <div class="col-10 alert alert-light p-1">
-                                {% if measuredValue.name == "Temperatur" %}
+                               {#} {% if measuredValue.name == "Temperatur" %}
                                     {{client.temperature}}
                                 {% elseif measuredValue.name == "Luftdruck"%}
                                     {{client.airpresure}}
                                 {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
                                     {{client.humidity}}
                                 {% endif %}
-                                {{measuredValue.unit}}
+                                {{measuredValue.unit}}#}
                             </div>
                             <a href="details">
                                 <h1>

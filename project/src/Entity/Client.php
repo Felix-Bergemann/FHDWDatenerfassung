@@ -2,111 +2,86 @@
 
 namespace App\Entity;
 
-class Client {
+use Doctrine\ORM\Mapping as ORM;
 
-    private $name;
-    private $lastUpdate;
-    private $temperature;
-    private $airPresure;
-    private $humidity;
+/**
+ * Client
+ *
+ * @ORM\Table(name="client")
+ * @ORM\Entity
+ */
+class Client
+{
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $intKey;
 
     /**
-     * Get the value of name
+     * @var int|null
+     *
+     * @ORM\Column(name="room_ik", type="integer", nullable=true)
      */
-    public function getName()
+    private $roomIk;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="wlan_ik", type="integer", nullable=true)
+     */
+    private $wlanIk;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="mac_adress", type="string", length=255, nullable=true)
+     */
+    private $macAdress;
+
+    public function getIntKey(): ?int
     {
-        return $this->name;
+        return $this->intKey;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @return  self
-     */
-    public function setName($name)
+    public function getRoomIk(): ?int
     {
-        $this->name = $name;
+        return $this->roomIk;
+    }
+
+    public function setRoomIk(?int $roomIk): self
+    {
+        $this->roomIk = $roomIk;
 
         return $this;
     }
 
-    /**
-     * Get the value of lastUpdate
-     */
-    public function getLastUpdate()
+    public function getWlanIk(): ?int
     {
-        return $this->lastUpdate;
+        return $this->wlanIk;
     }
 
-    /**
-     * Set the value of lastUpdate
-     *
-     * @return  self
-     */
-    public function setLastUpdate($lastUpdate)
+    public function setWlanIk(?int $wlanIk): self
     {
-        $this->lastUpdate = $lastUpdate;
+        $this->wlanIk = $wlanIk;
 
         return $this;
     }
 
-    /**
-     * Get the value of temprature
-     */
-    public function getTemperature()
+    public function getMacAdress(): ?string
     {
-        return $this->temperature;
+        return $this->macAdress;
     }
 
-    /**
-     * Set the value of temprature
-     *
-     * @return  self
-     */
-    public function setTemperature($temperature)
+    public function setMacAdress(?string $macAdress): self
     {
-        $this->temperature = $temperature;
+        $this->macAdress = $macAdress;
 
         return $this;
     }
 
-    /**
-     * Get the value of airPresure
-     */
-    public function getAirPresure()
-    {
-        return $this->airPresure;
-    }
 
-    /**
-     * Set the value of airPresure
-     *
-     * @return  self
-     */
-    public function setAirPresure($airPresure)
-    {
-        $this->airPresure = $airPresure;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of humidity
-     */
-    public function getHumidity()
-    {
-        return $this->humidity;
-    }
-
-    /**
-     * Set the value of humidity
-     *
-     * @return  self
-     */
-    public function setHumidity($humidity)
-    {
-        $this->humidity = $humidity;
-
-        return $this;
-    }
 }

@@ -2,57 +2,86 @@
 
 namespace App\Entity;
 
-use App\Repository\RoomRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=RoomRepository::class)
+ * Room
+ *
+ * @ORM\Table(name="room")
+ * @ORM\Entity
  */
 class Room
 {
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="int_key", type="integer", nullable=true)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private $intKey;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int|null
+     *
+     * @ORM\Column(name="user_ik", type="integer", nullable=true)
      */
-    private $int_key;
+    private $userIk;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var bool|null
+     *
+     * @ORM\Column(name="is_private", type="boolean", nullable=true)
      */
-    private $room_name;
+    private $isPrivate;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="room_name", type="string", length=255, nullable=true)
+     */
+    private $roomName;
 
     public function getIntKey(): ?int
     {
-        return $this->int_key;
+        return $this->intKey;
     }
 
-    public function setIntKey(int $int_key): self
+    public function getUserIk(): ?int
     {
-        $this->int_key = $int_key;
+        return $this->userIk;
+    }
+
+    public function setUserIk(?int $userIk): self
+    {
+        $this->userIk = $userIk;
+
+        return $this;
+    }
+
+    public function getIsPrivate(): ?bool
+    {
+        return $this->isPrivate;
+    }
+
+    public function setIsPrivate(?bool $isPrivate): self
+    {
+        $this->isPrivate = $isPrivate;
 
         return $this;
     }
 
     public function getRoomName(): ?string
     {
-        return $this->room_name;
+        return $this->roomName;
     }
 
-    public function setRoomName(string $room_name): self
+    public function setRoomName(?string $roomName): self
     {
-        $this->room_name = $room_name;
+        $this->roomName = $roomName;
 
         return $this;
     }
+
+
 }

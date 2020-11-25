@@ -2,74 +2,67 @@
 
 namespace App\Entity;
 
-use App\Repository\WlanRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=WlanRepository::class)
+ * Wlan
+ *
+ * @ORM\Table(name="wlan")
+ * @ORM\Entity
  */
 class Wlan
 {
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="int_key", type="integer", nullable=true)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private $intKey;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $int_key;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var int|null
+     *
+     * @ORM\Column(name="ssid", type="integer", nullable=true)
      */
     private $ssid;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @var int|null
+     *
+     * @ORM\Column(name="pass", type="integer", nullable=true)
      */
     private $pass;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getIntKey(): ?int
     {
-        return $this->int_key;
+        return $this->intKey;
     }
 
-    public function setIntKey(int $int_key): self
-    {
-        $this->int_key = $int_key;
-
-        return $this;
-    }
-
-    public function getSsid(): ?string
+    public function getSsid(): ?int
     {
         return $this->ssid;
     }
 
-    public function setSsid(?string $ssid): self
+    public function setSsid(?int $ssid): self
     {
         $this->ssid = $ssid;
 
         return $this;
     }
 
-    public function getPass(): ?string
+    public function getPass(): ?int
     {
         return $this->pass;
     }
 
-    public function setPass(string $pass): self
+    public function setPass(?int $pass): self
     {
         $this->pass = $pass;
 
         return $this;
     }
+
+
 }

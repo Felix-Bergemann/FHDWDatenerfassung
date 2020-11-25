@@ -2,78 +2,52 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=UserRepository::class)
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity
  */
 class User
 {
     /**
+     * @var int|null
+     *
+     * @ORM\Column(name="int_key", type="integer", nullable=true)
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private $intKey;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var string|null
+     *
+     * @ORM\Column(name="user_name", type="string", length=255, nullable=true)
      */
-    private $int_key;
+    private $userName;
 
     /**
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $Wlan;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $user_name;
-
-    /**
-     * @ORM\Column(type="string", length=255)
+     * @var string|null
+     *
+     * @ORM\Column(name="pass", type="string", length=255, nullable=true)
      */
     private $pass;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getIntKey(): ?int
     {
-        return $this->int_key;
-    }
-
-    public function setIntKey(int $int_key): self
-    {
-        $this->int_key = $int_key;
-
-        return $this;
-    }
-
-    public function getWlan()
-    {
-        return $this->Wlan;
-    }
-
-    public function setWlan($Wlan): self
-    {
-        $this->Wlan = $Wlan;
-
-        return $this;
+        return $this->intKey;
     }
 
     public function getUserName(): ?string
     {
-        return $this->user_name;
+        return $this->userName;
     }
 
-    public function setUserName(string $user_name): self
+    public function setUserName(?string $userName): self
     {
-        $this->user_name = $user_name;
+        $this->userName = $userName;
 
         return $this;
     }
@@ -83,10 +57,12 @@ class User
         return $this->pass;
     }
 
-    public function setPass(string $pass): self
+    public function setPass(?string $pass): self
     {
         $this->pass = $pass;
 
         return $this;
     }
+
+
 }

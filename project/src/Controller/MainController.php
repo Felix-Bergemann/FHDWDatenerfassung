@@ -119,4 +119,8 @@ class MainController extends AbstractController
         ]);
     }
 
+    public function logout(){
+
+    }
+
 }

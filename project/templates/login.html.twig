@@ -1,5 +1,8 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {% endif %}
     <div class= "p-2">
       <h3>
         Herzlich Willkommen - Bitte melden Sie sich an:
@@ -7,19 +10,20 @@
     </div>
     <section>
       <div class = "col-6">
-        <form method="post" action="start">
+        <form method="post">
           <div class="input-group m-2">
             <div class="input-group-prepend">
               <span class="input-group-text">User:</span>
             </div>
-            <input type="text" name = "user" class="form-control">
+            <input type="text" name="user" class="form-control" required>
           </div>
           <div class="input-group m-2">
             <div class="input-group-prepend">
               <span class="input-group-text">Passwort:</span>
             </div>
-            <input type = "password" name = "pw" class="form-control">
+            <input type = "password" name = "pw" class="form-control" required>
           </div>
+          <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
           <button type="submit" class="btn btn-primary">Anmelden</button>
         </form>
       </div>

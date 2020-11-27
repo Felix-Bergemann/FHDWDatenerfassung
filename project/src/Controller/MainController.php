@@ -4,74 +4,84 @@ namespace App\Controller;
 
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\Nav;
 use App\Entity\Measured;
 use App\Entity\Client;
+use App\Entity\Room;
 use App\Entity\User;
-
+use App\Entity\UserClient;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MainController extends AbstractController
 {
+
     /**
-    * @Route("/")
+    * @Route("/", name="app_login")
     */
-    public function loginAction(){
+    public function loginAction(AuthenticationUtils $authenticationUtils){
 
-        $em =  $this->getDoctrine()->getManager();
-        $clientsRepo = $em->getRepository(User::class);
-        dump($clientsRepo->findAll());
-
-        return $this->render('login.html.twig', [
+        if ($this->getUser()) {
+                return $this->redirectToRoute('start');
+        }else{
+            return $this->render('login.html.twig', [
+                'error' =>$authenticationUtils->getLastAuthenticationError(),
                 'navs' => [],
-        ]);
+            ]);
+        }
     }
 
     /**
     * @Route("/start", name="start")
     */
-    public function startAction(){
+    public function startAction(Request $request){
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $em = $this->getDoctrine()->getManager();
+            $clientRepo = $em->getRepository(Client::class);
+            $roomRepo = $em->getRepository(Room::class);
+            $userRepo = $em->getRepository(User::class);
 
-        $client1 = new Client();
+            $temperature = new Measured();
+            $airPresure = new Measured();
+            $humidity = new Measured();
 
-        $client2 = new Client();
+            $temperature->setName('Temperatur');
+            $temperature->setUnit('°C');
+            $temperature->setIcon('fas fa-temperature-high');
 
+            $airPresure->setName('Luftdruck');
+            $airPresure->setUnit('pHa');
+            $airPresure->setIcon('fas fa-wind');
 
-        $temperature = new Measured();
-        $airPresure = new Measured();
-        $humidity = new Measured();
+            $humidity->setName('Luftfeuchtigkeit');
+            $humidity->setUnit('%');
+            $humidity->setIcon('fas fa-cloud-rain');
 
-        $temperature->setName('Temperatur');
-        $temperature->setUnit('°C');
-        $temperature->setIcon('fas fa-temperature-high');
+            $measuredValues = [$temperature, $airPresure, $humidity];
 
-        $airPresure->setName('Luftdruck');
-        $airPresure->setUnit('pHa');
-        $airPresure->setIcon('fas fa-wind');
+            $logout = new Nav();
+            $logout->setLink('/logout');
+            $logout->setText('Abmelden');
+            $logout->setIcon('fas fa-window-close');
 
-        $humidity->setName('Luftfeuchtigkeit');
-        $humidity->setUnit('%');
-        $humidity->setIcon('fas fa-cloud-rain');
+            $syncClient = new Nav();
+            $syncClient->setLink('/clients');
+            $syncClient->setText('Clients zuordnen');
+            $syncClient->setIcon('fa fa-list');
 
-        $measuredValues = [$temperature, $airPresure, $humidity];
+            $navs = [$syncClient, $logout];
+            $clients = $clientRepo->findAll();
+            $rooms = $roomRepo->findAll();
 
-        $logout = new Nav();
-        $logout->setLink('/');
-        $logout->setText('Abmelden');
-        $logout->setIcon('fas fa-window-close');
-
-        $syncClient = new Nav();
-        $syncClient->setLink('/clients');
-        $syncClient->setText('Clients zuordnen');
-        $syncClient->setIcon('fa fa-list');
-
-        $navs = [$syncClient, $logout];
-        $clients = [$client1, $client2];
-
-        return $this->render('start.html.twig', [
-            'navs' => $navs,
-            'measuredValues'=> $measuredValues,
-            'clients' => $clients
-        ]);
+            return $this->render('start.html.twig', [
+                'navs' => $navs,
+                'measuredValues'=> $measuredValues,
+                'clients' => $clients
+            ]);
+        }
     }
 
     /**
@@ -100,27 +110,36 @@ class MainController extends AbstractController
     */
     public function clientsAction(){
 
+        $em = $this->getDoctrine()->getManager();
+        $clientRepo = $em->getRepository(Client::class);
+        $userClientRepo = $em->getRepository(UserClient::class);
+        $roomRepo = $em->getRepository(Room::class);
         $start = new Nav();
         $start->setText('Zurück');
         $start->setIcon('fas fa-arrow-circle-left');
         $start->setLink('/start');
         $logout = new Nav();
-        $logout->setLink('/');
+        $logout->setLink('/logout');
         $logout->setText('Abmelden');
         $logout->setIcon('fas fa-window-close');
 
         $navs = [$start, $logout];
 
-        $clients = ['Client 1', 'Client 2', 'Client 3','Client 4'];
+        $ownRooms = $roomRepo->findBy(['userIk' => 2]);
+        $userClients = $userClientRepo->findBy(['userIk'=>2]);
 
         return $this->render('clients.html.twig', [
-            'clients'=> $clients,
+            'clients'=> $clientRepo->findAll(),
+            'userClients' => $userClients,
+            'rooms' => $ownRooms,
             'navs' =>$navs,
         ]);
     }
 
-    public function logout(){
-
+    /**
+    * @Route("/logout", name="app_logout")
+    */
+    public function logoutAction(){
     }
 
 }

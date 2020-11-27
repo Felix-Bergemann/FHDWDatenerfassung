@@ -88,28 +88,33 @@ class MainController extends AbstractController
     * @Route("/details", name="details")
     */
     public function detailsAction(){
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }else{
+            $start = new Nav();
+            $start->setText('Zurück');
+            $start->setIcon('fas fa-arrow-circle-left');
+            $start->setLink('/start');
+            $logout = new Nav();
+            $logout->setLink('/');
+            $logout->setText('Abmelden');
+            $logout->setIcon('fas fa-window-close');
 
-        $start = new Nav();
-        $start->setText('Zurück');
-        $start->setIcon('fas fa-arrow-circle-left');
-        $start->setLink('/start');
-        $logout = new Nav();
-        $logout->setLink('/');
-        $logout->setText('Abmelden');
-        $logout->setIcon('fas fa-window-close');
+            $navs = [$start, $logout];
 
-        $navs = [$start, $logout];
-
-        return $this->render('details.html.twig', [
-            'navs' =>$navs,
-        ]);
+            return $this->render('details.html.twig', [
+                'navs' =>$navs,
+            ]);
+        }
     }
 
      /**
     * @Route("/clients", name="clients")
     */
     public function clientsAction(){
-
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }else{
         $em = $this->getDoctrine()->getManager();
         $clientRepo = $em->getRepository(Client::class);
         $userClientRepo = $em->getRepository(UserClient::class);
@@ -134,6 +139,7 @@ class MainController extends AbstractController
             'rooms' => $ownRooms,
             'navs' =>$navs,
         ]);
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ use App\Entity\Room;
 use App\Entity\User;
 use App\Entity\UserClient;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Validator\Constraints\All;
 
 class MainController extends AbstractController
 {
@@ -111,7 +112,9 @@ class MainController extends AbstractController
      /**
     * @Route("/clients", name="clients")
     */
-    public function clientsAction(){
+    public function clientsAction(Request $request){
+        dump($request->request);
+        dump($this->getUser());
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
@@ -140,6 +143,29 @@ class MainController extends AbstractController
             'navs' =>$navs,
         ]);
         }
+    }
+
+    /**
+     * @Route("/saveChanges", name="save_changes")
+     */
+    public function saveChangesAction(Request $request){
+        $clientsValues = [] ;
+        foreach($request->request as $key => $value){
+            if(is_int($key)){
+                array_push($clientsValues, $key);
+            }
+        }
+        $em = $this->getDoctrine()->getManager();
+        $userClientRepo = $em->getRepository(UserClient::class);
+        $userClients = $userClientRepo->findBy(["userIk"=>$this->getUser()->getIntKey()]);
+        foreach($userClients as $userClient){
+            if(!in_array($userClient->getIntKey(),$clientsValues)){
+                // hier neue  restliche UserClietns löschen
+            }
+        }
+
+
+        return $this->redirectToRoute('clients');
     }
 
     /**

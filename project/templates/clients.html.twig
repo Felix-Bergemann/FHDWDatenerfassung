@@ -7,7 +7,7 @@
                 <div class="m-4">
                     <h3> Einstellungen bearbeiten</h3>
                 </div>
-                <form method="post">
+                <form method="post" action="clients">
                     <div class="row" >
                         <div class="col-md-6">
                             <div class="m-2 text-center">
@@ -24,7 +24,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Öffentlicher Zugriff:</span>
                                     </div>
-                                     <input type="checkbox" checked data-toggle="toggle" data-on="Öffentlich" data-off="Privat" data-onstyle="success" data-offstyle="danger" id="{{room.roomName}}" data-width="160" value="{{room.isPrivate}}">
+                                     <input type="checkbox" checked data-toggle="toggle" data-on="Öffentlich" data-off="Privat" data-onstyle="success" data-offstyle="danger" name="isPrivate" data-width="160">
                                 </div>
                             {% endfor %}
                         </div>
@@ -37,11 +37,11 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{{client.macAdress}}</span>
                                     </div>
-                                     <input type="checkbox" checked data-toggle="toggle" data-on="Anzeigen" data-off="Ausblenden" data-onstyle="success" data-offstyle="danger" id="{{client.intKey}}" data-width="180">
+                                     <input type="checkbox" checked data-toggle="toggle" data-on="Anzeigen" data-off="Ausblenden" data-onstyle="success" data-offstyle="danger" name="{{client.intKey}}" data-width="180">
                                 </div>
                             {% endfor %}
                         </div>
-                        <button type="button" class="btn btn-primary m-4">
+                        <button type="submit" class="btn btn-primary m-4">
                             Einstellungen speichern
                         </button>
                     </div>

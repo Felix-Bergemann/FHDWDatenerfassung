@@ -30,7 +30,7 @@ class ApiController extends AbstractController {
 
         return new JsonResponse(
             [
-                'status' => 'ok',
+                'status' => 200,
             ],
             JsonResponse::HTTP_CREATED
         );

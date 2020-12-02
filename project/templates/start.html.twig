@@ -27,14 +27,14 @@
                         <div class="text-center mb-2 p-1">
                             <h4>{{measuredValue.name}}:</h4>
                             <div class="col-10 alert alert-light p-1">
-                               {#} {% if measuredValue.name == "Temperatur" %}
-                                    {{client.temperature}}
+                                {% if measuredValue.name == "Temperatur" %}
+
                                 {% elseif measuredValue.name == "Luftdruck"%}
-                                    {{client.airpresure}}
+
                                 {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
-                                    {{client.humidity}}
+
                                 {% endif %}
-                                {{measuredValue.unit}}#}
+                                {{measuredValue.unit}}
                             </div>
                             <a href="details">
                                 <h1>

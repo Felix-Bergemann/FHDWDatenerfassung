@@ -7,7 +7,7 @@
                 <div class="m-4">
                     <h3> Einstellungen bearbeiten</h3>
                 </div>
-                <form method="post" action="clients">
+                <form method="post" action="saveChanges">
                     <div class="row" >
                         <div class="col-md-6">
                             <div class="m-2 text-center">
@@ -18,13 +18,13 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Name:</span>
                                     </div>
-                                    <input type="text" class="form-control" name="roomName" placeholder="{{room.roomName}}">
+                                    <input type="text" class="form-control" name="room.{{room.intKey}}" placeholder="{{room.roomName}}">
                                 </div>
                                 <div class="input-group mb-3 input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">Öffentlicher Zugriff:</span>
                                     </div>
-                                     <input type="checkbox" checked data-toggle="toggle" data-on="Öffentlich" data-off="Privat" data-onstyle="success" data-offstyle="danger" name="isPrivate" data-width="160">
+                                     <input type="checkbox" {% if room.isPrivate == 0 %} checked {% endif %} data-toggle="toggle" data-on="Öffentlich" data-off="Privat" data-onstyle="success" data-offstyle="danger" name="room.{{room.intKey}}.isPrivate" data-width="160">
                                 </div>
                             {% endfor %}
                         </div>
@@ -37,7 +37,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">{{client.macAdress}}</span>
                                     </div>
-                                     <input type="checkbox" checked data-toggle="toggle" data-on="Anzeigen" data-off="Ausblenden" data-onstyle="success" data-offstyle="danger" name="{{client.intKey}}" data-width="180">
+                                     <input type="checkbox" {% if client.intKey in userClientsValues %} checked {% endif %}  data-toggle="toggle" data-on="Anzeigen" data-off="Ausblenden" data-onstyle="success" data-offstyle="danger" name="{{client.intKey}}" data-width="180">
                                 </div>
                             {% endfor %}
                         </div>

@@ -40,5 +40,31 @@ class UserClient
         return $this->clientIk;
     }
 
+    /**
+     * Set the value of userIk
+     *
+     * @param  int|null  $userIk
+     *
+     * @return  self
+     */
+    public function setUserIk($userIk)
+    {
+        $this->userIk = $userIk;
 
+        return $this;
+    }
+
+    /**
+     * Set the value of clientIk
+     *
+     * @param  int|null  $clientIk
+     *
+     * @return  self
+     */
+    public function setClientIk($clientIk)
+    {
+        $this->clientIk = $clientIk;
+
+        return $this;
+    }
 }

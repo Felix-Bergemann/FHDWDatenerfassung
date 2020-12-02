@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClientRecord
  *
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRecordRepository")
  * @ORM\Table(name="client_record")
  * @ORM\Entity
  */

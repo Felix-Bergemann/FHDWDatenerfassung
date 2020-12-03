@@ -9,6 +9,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Client;
 use App\Entity\ClientRecord;
 
+function console_log($output, $with_script_tags = true) {
+    $js_code = 'console.log(' . json_encode($output, JSON_HEX_TAG) . 
+');';
+    if ($with_script_tags) {
+        $js_code = '<script>' . $js_code . '</script>';
+    }
+    echo $js_code;
+}
 
 class ApiController extends AbstractController {
 
@@ -21,19 +29,16 @@ class ApiController extends AbstractController {
         $clientsRepo = $em->getRepository(Client::class);
 
         $clientRecord = new ClientRecord();
-        $clientRecord->setRecordDate($data->{'date'});
-        $clientRecord->setTemperature($data->{'measurements'}->{'temperature'});
-        $clientRecord->setAirPressure($data->{'measurements'}->{'pressure'});
-        $clientRecord->setHumidity($data->{'measurements'}->{'humidity'});
+        $clientRecord->setRecordDate(date_create($data['date']));
+        $clientRecord->setTemperature($data['measurements']['temperature']);
+        $clientRecord->setAirPressure($data['measurements']['pressure']);
+        $clientRecord->setHumidity($data['measurements']['humidity']);
+
+        console_log($data);
         $em->persist($clientRecord);
         $em->flush();
 
-        return new JsonResponse(
-            [
-                'status' => 200,
-            ],
-            JsonResponse::HTTP_CREATED
-        );
+        return new JsonResponse(200);
     }
 
 }

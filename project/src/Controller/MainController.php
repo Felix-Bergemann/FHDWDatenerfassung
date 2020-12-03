@@ -17,14 +17,14 @@ use Symfony\Component\Validator\Constraints\All;
 
 class MainController extends AbstractController
 {
-
     /**
     * @Route("/", name="app_login")
     */
     public function loginAction(AuthenticationUtils $authenticationUtils){
 
         if ($this->getUser()) {
-                return $this->redirectToRoute('start');
+
+            return $this->redirectToRoute('start');
         }else{
             return $this->render('login.html.twig', [
                 'error' =>$authenticationUtils->getLastAuthenticationError(),
@@ -33,13 +33,17 @@ class MainController extends AbstractController
         }
     }
 
+
+
     /**
     * @Route("/start", name="start")
     */
     public function startAction(Request $request){
         if (!$this->getUser()) {
+            
             return $this->redirectToRoute('app_login');
         }else{
+            //console_log($this->getUser());
             $em = $this->getDoctrine()->getManager();
             $clientRepo = $em->getRepository(Client::class);
             $roomRepo = $em->getRepository(Room::class);

@@ -128,12 +128,12 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate(): ?\DateTimeInterface
+    public function getRecordDate(): ?\DateTime
     {
         return $this->recordDate;
     }
 
-    public function setRecordDate(?\DateTimeInterface $recordDate): self
+    public function setRecordDate(?\DateTime $recordDate): self
     {
         $this->recordDate = $recordDate;
 

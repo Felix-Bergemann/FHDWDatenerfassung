@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Client
 {
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Column(name="int_key", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

@@ -40,6 +40,7 @@ class MainController extends AbstractController
         }else{
             $em = $this->getDoctrine()->getManager();
             $clientRepo = $em->getRepository(Client::class);
+            $roomRepo =$em->getRepository(Room::class);
 
             $temperature = new Measured();
             $airPresure = new Measured();
@@ -71,16 +72,21 @@ class MainController extends AbstractController
 
             $navs = [$syncClient, $logout];
             $clients = $clientRepo->findAll();
+            $rooms = $roomRepo->findAll();
             $currentClientRecords = [] ;
+            $recordRepo = $this->getDoctrine()->getRepository(ClientRecord::class);
             foreach($clients as $client){
                 // Hier weiter machen
-                //$curReccord = $this->getDoctrine()->getRepository(ClientRecord::class)->getMaxDateEntry($client->getIntKey());
+
+                //$curReccord = $recordRepo->getMaxDateEntry($client->getIntKey());
             }
 
             return $this->render('start.html.twig', [
                 'navs' => $navs,
                 'measuredValues'=> $measuredValues,
                 'clients' => $clients,
+                'userIk' => $this->getUser()->getIntKey(),
+                'rooms' => $rooms,
                 'currentClientValues' => $currentClientRecords
             ]);
         }

@@ -7,16 +7,15 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ClientRecord
  *
- * @ORM\Entity(repositoryClass="App\Repository\ClientRecordRepository")
  * @ORM\Table(name="client_record")
  * @ORM\Entity
  */
 class ClientRecord
 {
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Column(name="int_key", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */

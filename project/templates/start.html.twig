@@ -2,51 +2,58 @@
 {% block body %}
 <section class="p-4">
         {% for client in clients %}
-        <div class="container">
-            <div class="jumbotron">
-                <div class="d-flex justify-content-around mb-2">
-                    <span class="alert-light border rounded m-2 p-2">
-                        <h3>Client {{client.macAdress}}</h3>
-                    </span>
-                </div>
-                <div class="row">
-                    <div class="col-3"></div>
-                    {#{% if client.lastupdate == true %}
-                        <div class="col-6 m-2 text-center alert alert-success">
-                            <strong>Daten aktuell</strong>
-                        </div>
-                    {% else %}
-                        <div class="col-6 m-2 text-center alert alert-danger">
-                            <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
-                        </div>
-                    {% endif %}#}
-                    <div class="col-3"></div>
-                </div>
-                <div class="d-flex justify-content-around mb-3 p-1">
-                    {% for measuredValue in measuredValues %}
-                        <div class="text-center mb-2 p-1">
-                            <h4>{{measuredValue.name}}:</h4>
-                            <div class="col-10 alert alert-light p-1">
-                                {% if measuredValue.name == "Temperatur" %}
-
-                                {% elseif measuredValue.name == "Luftdruck"%}
-
-                                {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
-
-                                {% endif %}
-                                {{measuredValue.unit}}
+            {% for room in rooms %}
+                {% if client.roomIk == room.intKey %}
+                    {% if ( client.owningUserIk == userIk or room.isPrivate == 0) %}
+                    <div class="container">
+                        <div class="jumbotron">
+                            <div class="d-flex justify-content-around mb-2">
+                                <div class="alert-light border rounded m-2 p-2">
+                                    <h3>Client {{client.macAdress}}</h3>
+                                    <h4>aktueller Raum: {{room.roomName}}</h4>
+                                </div>
                             </div>
-                            <a href="details">
-                                <h1>
-                                    <i class="{{measuredValue.icon}}"></i>
-                                </h1>
-                            </a>
+                            <div class="row">
+                                <div class="col-3"></div>
+                                {#{% if client.lastupdate == true %}
+                                    <div class="col-6 m-2 text-center alert alert-success">
+                                        <strong>Daten aktuell</strong>
+                                    </div>
+                                {% else %}
+                                    <div class="col-6 m-2 text-center alert alert-danger">
+                                        <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
+                                    </div>
+                                {% endif %}#}
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="d-flex justify-content-around mb-3 p-1">
+                                {% for measuredValue in measuredValues %}
+                                    <div class="text-center mb-2 p-1">
+                                        <h4>{{measuredValue.name}}:</h4>
+                                        <div class="col-10 alert alert-light p-1">
+                                            {% if measuredValue.name == "Temperatur" %}
+
+                                            {% elseif measuredValue.name == "Luftdruck"%}
+
+                                            {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
+
+                                            {% endif %}
+                                            {{measuredValue.unit}}
+                                        </div>
+                                        <a href="details">
+                                            <h1>
+                                                <i class="{{measuredValue.icon}}"></i>
+                                            </h1>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <hr>
+                    </div>
+                    <hr>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
         {% endfor %}
     </section>
 {% endblock %}

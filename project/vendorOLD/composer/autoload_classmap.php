@@ -21,6 +21,7 @@ return array(
     'App\\Repository\\RoomRepository' => $baseDir . '/src/Repository/RoomRepository.php',
     'App\\Repository\\UserClientRepository' => $baseDir . '/src/Repository/UserClientRepository.php',
     'App\\Repository\\UserRepository' => $baseDir . '/src/Repository/UserRepository.php',
+    'App\\Repository\\ClientRecordRepository' => $baseDir . '/src/Repository/ClientRecordRepository.php',
     'App\\Security\\LoginFormAuthenticator' => $baseDir . '/src/Security/LoginFormAuthenticator.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Collator' => $vendorDir . '/symfony/intl/Resources/stubs/Collator.php',

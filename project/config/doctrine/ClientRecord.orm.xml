@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="App\Entity\ClientRecord" table="client_record">
+    <id name="intKey" type="integer" column="int_key">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="clientIk" type="integer" column="client_ik" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="roomIk" type="integer" column="room_ik" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="temperature" type="float" column="temperature" precision="10" scale="0" nullable="true"/>
+    <field name="humidity" type="float" column="humidity" precision="10" scale="0" nullable="true"/>
+    <field name="airPressure" type="float" column="air_pressure" precision="10" scale="0" nullable="true"/>
+    <field name="recordDate" type="date" column="record_date" nullable="true"/>
+  </entity>
+</doctrine-mapping>

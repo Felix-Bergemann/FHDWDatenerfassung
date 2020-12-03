@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method ClientRecord|null findOneBy(array $criteria, array $orderBy = null)
  * @method ClientRecord[]    findAll()
  * @method ClientRecord[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method ClientRecord|null getMaxDateEntry(int $clientNo);
  */
 class ClientRecordRepository extends ServiceEntityRepository
 {
@@ -21,7 +20,7 @@ class ClientRecordRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return: ClientRecord
+     * @return ClientRecord
      */
     public function getMaxDateEntry($clientNo){
         $qb = $this->createQueryBuilder('mr')
@@ -30,19 +29,18 @@ class ClientRecordRepository extends ServiceEntityRepository
         ->andWhere('recordDate= :maxRecordDate')
         ->setParameter('maxRecordDate', 'Select max(mr.recordDate) where mr.clientIk = :clientNo')
         ->getQuery();
-        return $qb->getResult();
+        return $qb->getSingleResult();
     }
-
     // /**
     //  * @return ClientRecord[] Returns an array of ClientRecord objects
     //  */
     /*
     public function findByExampleField($value)
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
             ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
+            ->orderBy('c.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
@@ -53,8 +51,8 @@ class ClientRecordRepository extends ServiceEntityRepository
     /*
     public function findOneBySomeField($value): ?ClientRecord
     {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()

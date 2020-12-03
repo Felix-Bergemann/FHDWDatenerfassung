@@ -140,5 +140,9 @@ class ClientRecord
         return $this;
     }
 
+    public function getMeasurements(){
+        $measurements = [$this->temperature, $this->humidity, $this->airPressure, $this->recordDate];
+        return $measurements;
+    }
 
 }

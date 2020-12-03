@@ -95,7 +95,8 @@ class MainController extends AbstractController
     /**
     * @Route("/details", name="details")
     */
-    public function detailsAction(){
+    public function detailsAction(){ 
+       // echo '<script>console.log(' . json_encode($_POST['client'], JSON_HEX_TAG) . ');</script>';
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
@@ -109,6 +110,22 @@ class MainController extends AbstractController
             $logout->setIcon('fas fa-window-close');
 
             $navs = [$start, $logout];
+
+            $clientKey = $_POST['client'];
+
+            $em = $this->getDoctrine()->getManager();
+            $clientRecordRepo = $em->getRepository(ClientRecord::class);
+
+            $clientRecords = $clientRecordRepo->findBy(['clientIk' => $clientKey]);
+
+            $clientRecordsValues = [];
+
+            foreach($clientRecords as $clientRecord){
+                echo '<script>console.log(' . json_encode( $clientRecord->getMeasurements(), JSON_HEX_TAG) . ');</script>';
+
+                array_push($clientRecordsValues, $clientRecord->getMeasurements());
+
+            }
 
             return $this->render('details.html.twig', [
                 'navs' =>$navs,

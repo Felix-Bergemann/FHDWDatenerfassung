@@ -24,7 +24,7 @@ class ApiController extends AbstractController {
         $clientRecord->setTemperature($data['measurements']['temperature']);
         $clientRecord->setAirPressure($data['measurements']['pressure']);
         $clientRecord->setHumidity($data['measurements']['humidity']);
-
+        
         $em->persist($clientRecord);
         $em->flush();
 

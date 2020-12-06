@@ -5,12 +5,15 @@
         <title>{% block title %}FHDW - Datenerfassung{% endblock %}</title>
         {% block stylesheets %}
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-            <link rel="stylesheet" href="project/templates/css/basedesign.css">
+            {#project/templates/css/basedesign.css#}
+            <link rel="stylesheet" href="./css/basedesign.css">
             <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
             <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
         {% endblock %}
     </head>
+    
     <body>
+
         <header>
             <nav class="navbar bg-dark navbar-dark">
               <!-- Brand -->
@@ -35,6 +38,8 @@
               </div>
             </nav>
         </header>
+
+
         {% block body %}
         {% endblock %}
         <footer>
@@ -44,6 +49,9 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
             <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
             <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+            <script src="/bundles/mukadichartjs/Chart.bundle.min.js"></script>
+            <script src="/bundles/mukadichartjs/mukadi.chart.min.js"></script>
         {% endblock %}
+
     </body>
 </html>

@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class Client
 {
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Column(name="int_key", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -31,9 +31,9 @@ class Client
     /**
      * @var int|null
      *
-     * @ORM\Column(name="wlan_ik", type="integer", nullable=true)
+     * @ORM\Column(name="owning_user_ik", type="integer", nullable=true)
      */
-    private $wlanIk;
+    private $owningUserIk;
 
     /**
      * @var string|null
@@ -59,14 +59,14 @@ class Client
         return $this;
     }
 
-    public function getWlanIk(): ?int
+    public function getOwningUserIk(): ?int
     {
-        return $this->wlanIk;
+        return $this->owningUserIk;
     }
 
-    public function setWlanIk(?int $wlanIk): self
+    public function setOwningUserIk(?int $owningUserIk): self
     {
-        $this->wlanIk = $wlanIk;
+        $this->owningUserIk = $owningUserIk;
 
         return $this;
     }

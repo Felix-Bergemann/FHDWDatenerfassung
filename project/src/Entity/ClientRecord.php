@@ -13,9 +13,9 @@ use Doctrine\ORM\Mapping as ORM;
 class ClientRecord
 {
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Column(name="int_key", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -57,9 +57,9 @@ class ClientRecord
     private $airPressure;
 
     /**
-     * @var \DateTime|null
+     * @var \string|null
      *
-     * @ORM\Column(name="record_date", type="date", nullable=true)
+     * @ORM\Column(name="record_date", type="text", nullable=true)
      */
     private $recordDate;
 
@@ -128,17 +128,21 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate(): ?\DateTimeInterface
+    public function getRecordDate(): string
     {
         return $this->recordDate;
     }
 
-    public function setRecordDate(?\DateTimeInterface $recordDate): self
+    public function setRecordDate(string $recordDate): self
     {
         $this->recordDate = $recordDate;
 
         return $this;
     }
 
+    public function getMeasurements(){
+        $measurements = [$this->temperature, $this->humidity, $this->airPressure, $this->recordDate];
+        return $measurements;
+    }
 
 }

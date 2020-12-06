@@ -12,19 +12,22 @@ use App\Entity\Client;
 use App\Entity\ClientRecord;
 use App\Entity\Room;
 use App\Entity\UserClient;
+use App\Repository\ClientRecordRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Mukadi\Chart\Utils\RandomColorFactory;
 use Mukadi\ChartJSBundle\Chart\Builder;
 use Mukadi\Chart\Chart;
 use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class MainController extends AbstractController
 {
 
     /**
     * @Route("/", name="app_login")
+    * Überprüfung ob ein Nutzer angemeldet ist und jeweilige Zuweisung
     */
     public function loginAction(AuthenticationUtils $authenticationUtils){
-
         if ($this->getUser()) {
                 return $this->redirectToRoute('start');
         }else{
@@ -37,8 +40,10 @@ class MainController extends AbstractController
 
     /**
     * @Route("/start", name="start")
+    * Abruf der Startseite
     */
-    public function startAction(Request $request){
+    public function startAction(ManagerRegistry $registry){
+        // Überprüfung auf Anmeldung
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
@@ -46,6 +51,7 @@ class MainController extends AbstractController
             $clientRepo = $em->getRepository(Client::class);
             $roomRepo =$em->getRepository(Room::class);
 
+            // Erstellung von Objekten zur Messwertdarstellung
             $temperature = new Measured();
             $airPresure = new Measured();
             $humidity = new Measured();
@@ -64,6 +70,7 @@ class MainController extends AbstractController
 
             $measuredValues = [$temperature, $airPresure, $humidity];
 
+            // Erstellung von Navigationselementen
             $logout = new Nav();
             $logout->setLink('/logout');
             $logout->setText('Abmelden');
@@ -71,19 +78,26 @@ class MainController extends AbstractController
 
             $syncClient = new Nav();
             $syncClient->setLink('/clients');
-            $syncClient->setText('Clients zuordnen');
+            $syncClient->setText('Einstellungen');
             $syncClient->setIcon('fa fa-list');
 
             $navs = [$syncClient, $logout];
+
+            // Auslesen der Daten aus DB in Objekte
             $clients = $clientRepo->findAll();
             $rooms = $roomRepo->findAll();
-            $currentClientRecords = [] ;
-            $recordRepo = $this->getDoctrine()->getRepository(ClientRecord::class);
-            foreach($clients as $client){
-                // Hier weiter machen
 
-                //$curReccord = $recordRepo->getMaxDateEntry($client->getIntKey());
+            // Aktuelle Werte Clients holen
+            $currentClientRecords = [] ;
+            $crRepo = new ClientRecordRepository($registry);
+
+            foreach($clients as $client){
+                if (!empty($crRepo->getMaxDateEntry($client->getIntKey()))){
+                    array_push($currentClientRecords, $crRepo->getMaxDateEntry($client->getIntKey()));
+                }
             }
+
+            $minDate = date("Y-m-d H:i:s", strtotime("-1 hours"));
 
             return $this->render('start.html.twig', [
                 'navs' => $navs,
@@ -91,11 +105,13 @@ class MainController extends AbstractController
                 'clients' => $clients,
                 'userIk' => $this->getUser()->getIntKey(),
                 'rooms' => $rooms,
-                'currentClientValues' => $currentClientRecords
+                'currentClientValues' => $currentClientRecords,
+                'minDate' => $minDate
             ]);
         }
     }
-    public function chart(Builder $builder,string $value, string $bennenung,string $farbe) {        
+
+    public function chart(Builder $builder,string $value, string $bennenung,string $farbe) {
         $builder
             ->query('SELECT p.recordDate,p.'.$value.' FROM \App\Entity\ClientRecord p where p.clientIk=:client_key order by p.recordDate')
             ->setParameter(':client_key',$_POST['client'])
@@ -104,7 +120,7 @@ class MainController extends AbstractController
             ])
             ->labels('recordDate')
         ;
-                
+
         $chart = $builder->buildChart($value,Chart::LINE);
         return $chart;
     }
@@ -112,39 +128,26 @@ class MainController extends AbstractController
     /**
     * @Route("/details", name="details")
     */
-    public function detailsAction(Request $request){ 
-       // echo '<script>console.log(' . json_encode($_POST['client'], JSON_HEX_TAG) . ');</script>';
+    public function detailsAction(Request $request){
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
+            // Erstellung von Navigationselementen
             $start = new Nav();
             $start->setText('Zurück');
             $start->setIcon('fas fa-arrow-circle-left');
             $start->setLink('/start');
             $logout = new Nav();
-            $logout->setLink('/');
+            $logout->setLink('/logout');
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 
             $navs = [$start, $logout];
 
-            $clientKey = $request->request->get('client');
-
             $em = $this->getDoctrine()->getManager();
-            $clientRecordRepo = $em->getRepository(ClientRecord::class);
             $roomRepo = $em->getRepository(Room::class);
 
-
-            $clientRecords = $clientRecordRepo->findBy(['clientIk' => $clientKey]);
             $room = $roomRepo->findOneBy(['intKey' => $request->request->get('room')]);
-
-
-            $clientRecordsValues = [];
-
-            foreach($clientRecords as $clientRecord){
-                echo '<script>console.log(' . json_encode( $clientRecord->getMeasurements(), JSON_HEX_TAG) . ');</script>';
-                array_push($clientRecordsValues, $clientRecord->getMeasurements());
-            }
 
             $builder = new Builder($em);
             $chart1 = $this->chart($builder,"temperature", "Temperatur", "#ffbb00");
@@ -158,41 +161,43 @@ class MainController extends AbstractController
         }
     }
 
-     /**
+    /**
     * @Route("/clients", name="clients")
+    * Einstellungsseite
     */
     public function clientsAction(){
+        // Überprüfung auf Anmeldung
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
-        $em = $this->getDoctrine()->getManager();
-        $clientRepo = $em->getRepository(Client::class);
-        $userClientRepo = $em->getRepository(UserClient::class);
-        $roomRepo = $em->getRepository(Room::class);
+            $em = $this->getDoctrine()->getManager();
+            $clientRepo = $em->getRepository(Client::class);
+            $userClientRepo = $em->getRepository(UserClient::class);
+            $roomRepo = $em->getRepository(Room::class);
+            // Erstellung von Navigationselementen
+            $start = new Nav();
+            $start->setText('Zurück');
+            $start->setIcon('fas fa-arrow-circle-left');
+            $start->setLink('/start');
+            $logout = new Nav();
+            $logout->setLink('/logout');
+            $logout->setText('Abmelden');
+            $logout->setIcon('fas fa-window-close');
 
-        $start = new Nav();
-        $start->setText('Zurück');
-        $start->setIcon('fas fa-arrow-circle-left');
-        $start->setLink('/start');
-        $logout = new Nav();
-        $logout->setLink('/logout');
-        $logout->setText('Abmelden');
-        $logout->setIcon('fas fa-window-close');
-
-        $navs = [$start, $logout];
-
-        $ownRooms = $roomRepo->findBy(['userIk' => $this->getUser()->getIntKey()]);
-        $userClients = $userClientRepo->findBy(['userIk'=>$this->getUser()->getIntKey()]);
-        $userClientValues = [];
-        foreach($userClients as $userClient){
-            array_push($userClientValues, $userClient->getClientIk());
-        }
-        return $this->render('clients.html.twig', [
-            'clients'=> $clientRepo->findAll(),
-            'userClientsValues' => $userClientValues,
-            'rooms' => $ownRooms,
-            'navs' =>$navs,
-        ]);
+            $navs = [$start, $logout];
+            // Selektierung der Datenwerte aus DB
+            $ownRooms = $roomRepo->findBy(['userIk' => $this->getUser()->getIntKey()]);
+            $userClients = $userClientRepo->findBy(['userIk'=>$this->getUser()->getIntKey()]);
+            $userClientValues = [];
+            foreach($userClients as $userClient){
+                array_push($userClientValues, $userClient->getClientIk());
+            }
+            return $this->render('clients.html.twig', [
+                'clients'=> $clientRepo->findAll(),
+                'userClientsValues' => $userClientValues,
+                'rooms' => $ownRooms,
+                'navs' =>$navs,
+            ]);
         }
     }
 

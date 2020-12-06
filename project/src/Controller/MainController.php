@@ -153,9 +153,11 @@ class MainController extends AbstractController
             $chart1 = $this->chart($builder,"temperature", "Temperatur", "#ffbb00");
             $chart2 = $this->chart($builder,"humidity", "Luftfeuchtigkeit", "#00ddff");
             $chart3 = $this->chart($builder,"airPressure", "Luftdruck", "#0dff9e");
+
+            $charts = [$chart1,$chart2,$chart3];
             return $this->render('details.html.twig', [
                 'navs' =>$navs,
-                'charts' => [$chart1, $chart2,$chart3],
+                'charts' => $charts,
                 'room' => $room,
             ]);
         }

@@ -2,11 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\ClientRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * ClientRecord
  *
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRecordRepository");
  * @ORM\Table(name="client_record")
  * @ORM\Entity
  */
@@ -59,7 +62,7 @@ class ClientRecord
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="record_date", type="date", nullable=true)
+     * @ORM\Column(name="record_date", type="datetime", nullable=true)
      */
     private $recordDate;
 
@@ -128,9 +131,10 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate(): ?\DateTimeInterface
+    public function getRecordDate()
     {
-        return $this->recordDate;
+
+        return $this->recordDate->format("Y-m-d H:i:s");
     }
 
     public function setRecordDate(?\DateTimeInterface $recordDate): self

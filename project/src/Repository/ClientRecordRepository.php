@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\ClientRecord;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,15 +23,30 @@ class ClientRecordRepository extends ServiceEntityRepository
     /**
      * @return ClientRecord
      */
-    public function getMaxDateEntry($clientNo){
+    public function getMaxDateEntry($clientNo): ?ClientRecord
+    {
+        $subQb = $this->createQueryBuilder('sq')
+        ->where('sq.clientIk= :clientNo')
+        ->setParameter('clientNo', $clientNo)
+        ->select('MAX(sq.recordDate) AS maxDate')
+        ->getQuery();
+        $subQbResult= $subQb->getSingleResult();
+
         $qb = $this->createQueryBuilder('mr')
         ->where('mr.clientIk= :clientNo')
+        ->andWhere('mr.recordDate = :maxDate')
         ->setParameter('clientNo', $clientNo)
-        ->andWhere('recordDate= :maxRecordDate')
-        ->setParameter('maxRecordDate', 'Select max(mr.recordDate) where mr.clientIk = :clientNo')
+        ->setParameter('maxDate', $subQbResult['maxDate'])
         ->getQuery();
-        return $qb->getSingleResult();
+        try{
+            $result =$qb->getSingleResult();
+        }catch(NoResultException $nre){
+            $result = null;
+        }
+
+        return $result;
     }
+
     // /**
     //  * @return ClientRecord[] Returns an array of ClientRecord objects
     //  */

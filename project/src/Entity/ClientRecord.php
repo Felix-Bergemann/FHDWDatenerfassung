@@ -60,9 +60,13 @@ class ClientRecord
     private $airPressure;
 
     /**
-     * @var \DateTime|null
+     * @var \string|null
      *
+<<<<<<< HEAD
      * @ORM\Column(name="record_date", type="datetime", nullable=true)
+=======
+     * @ORM\Column(name="record_date", type="text", nullable=true)
+>>>>>>> e5776a7e068898f7e96111730bad5fa255de9afd
      */
     private $recordDate;
 
@@ -131,13 +135,13 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate()
-    {
 
-        return $this->recordDate->format("Y-m-d H:i:s");
+    public function getRecordDate(): string
+    {
+        return $this->recordDate;
     }
 
-    public function setRecordDate(?\DateTimeInterface $recordDate): self
+    public function setRecordDate(string $recordDate): self
     {
         $this->recordDate = $recordDate;
 

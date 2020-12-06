@@ -8,6 +8,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Client;
 use App\Entity\ClientRecord;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class ApiController extends AbstractController {
 
@@ -20,11 +22,13 @@ class ApiController extends AbstractController {
         $clientsRepo = $em->getRepository(Client::class);
 
         $clientRecord = new ClientRecord();
-        $clientRecord->setRecordDate(date_create($data['date']));
+        $date = $data['date'];
+        $date = date_create($date)->format('Y-m-d H:i:s');
+        $clientRecord->setRecordDate($date);      
         $clientRecord->setTemperature($data['measurements']['temperature']);
         $clientRecord->setAirPressure($data['measurements']['pressure']);
         $clientRecord->setHumidity($data['measurements']['humidity']);
-
+        
         $em->persist($clientRecord);
         $em->flush();
 

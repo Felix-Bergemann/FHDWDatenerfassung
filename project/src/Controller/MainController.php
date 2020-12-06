@@ -14,6 +14,11 @@ use App\Entity\Room;
 use App\Entity\UserClient;
 use App\Repository\ClientRecordRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Mukadi\Chart\Utils\RandomColorFactory;
+use Mukadi\ChartJSBundle\Chart\Builder;
+use Mukadi\Chart\Chart;
+use Symfony\Component\Validator\Constraints\DateTime;
+
 
 class MainController extends AbstractController
 {
@@ -106,12 +111,24 @@ class MainController extends AbstractController
         }
     }
 
+    public function chart(Builder $builder,string $value, string $bennenung,string $farbe) {
+        $builder
+            ->query('SELECT p.recordDate,p.'.$value.' FROM \App\Entity\ClientRecord p where p.clientIk=:client_key order by p.recordDate')
+            ->setParameter(':client_key',$_POST['client'])
+            ->addDataset($value,$bennenung,[
+                "backgroundColor" => $farbe
+            ])
+            ->labels('recordDate')
+        ;
+
+        $chart = $builder->buildChart($value,Chart::LINE);
+        return $chart;
+    }
+
     /**
     * @Route("/details", name="details")
     */
     public function detailsAction(Request $request){
-        dump($request->request);
-        // Überprüfung auf Anmeldung
         if (!$this->getUser()) {
             return $this->redirectToRoute('app_login');
         }else{
@@ -127,29 +144,24 @@ class MainController extends AbstractController
 
             $navs = [$start, $logout];
 
-            $clientKey = $request->request->get('client');
-
             $em = $this->getDoctrine()->getManager();
-            $clientRecordRepo = $em->getRepository(ClientRecord::class);
+            $roomRepo = $em->getRepository(Room::class);
 
-            $clientRecords = $clientRecordRepo->findBy(['clientIk' => $clientKey]);
+            $room = $roomRepo->findOneBy(['intKey' => $request->request->get('room')]);
 
-            $clientRecordsValues = [];
-
-            foreach($clientRecords as $clientRecord){
-                echo '<script>console.log(' . json_encode( $clientRecord->getMeasurements(), JSON_HEX_TAG) . ');</script>';
-
-                array_push($clientRecordsValues, $clientRecord->getMeasurements());
-
-            }
-
+            $builder = new Builder($em);
+            $chart1 = $this->chart($builder,"temperature", "Temperatur", "#ffbb00");
+            $chart2 = $this->chart($builder,"humidity", "Luftfeuchtigkeit", "#00ddff");
+            $chart3 = $this->chart($builder,"airPressure", "Luftdruck", "#0dff9e");
             return $this->render('details.html.twig', [
                 'navs' =>$navs,
+                'charts' => [$chart1, $chart2,$chart3],
+                'room' => $room,
             ]);
         }
     }
 
-     /**
+    /**
     * @Route("/clients", name="clients")
     * Einstellungsseite
     */

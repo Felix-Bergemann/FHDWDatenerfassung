@@ -111,10 +111,10 @@ class MainController extends AbstractController
         }
     }
 
-    public function chart(Builder $builder,string $value, string $bennenung,string $farbe) {
+    public function chart(Builder $builder,string $value, string $bennenung,string $farbe, Request $request) {
         $builder
             ->query('SELECT p.recordDate,p.'.$value.' FROM \App\Entity\ClientRecord p where p.clientIk=:client_key order by p.recordDate')
-            ->setParameter(':client_key',$_POST['client'])
+            ->setParameter(':client_key',$request->request->get('client'))
             ->addDataset($value,$bennenung,[
                 "backgroundColor" => $farbe
             ])
@@ -150,9 +150,9 @@ class MainController extends AbstractController
             $room = $roomRepo->findOneBy(['intKey' => $request->request->get('room')]);
 
             $builder = new Builder($em);
-            $chart1 = $this->chart($builder,"temperature", "Temperatur", "#ffbb00");
-            $chart2 = $this->chart($builder,"humidity", "Luftfeuchtigkeit", "#00ddff");
-            $chart3 = $this->chart($builder,"airPressure", "Luftdruck", "#0dff9e");
+            $chart1 = $this->chart($builder,"temperature", "Temperatur", "#ffbb00", $request);
+            $chart2 = $this->chart($builder,"humidity", "Luftfeuchtigkeit", "#00ddff", $request);
+            $chart3 = $this->chart($builder,"airPressure", "Luftdruck", "#0dff9e", $request);
 
             $charts = [$chart1,$chart2,$chart3];
             return $this->render('details.html.twig', [

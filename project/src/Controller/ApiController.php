@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Client;
 use App\Entity\ClientRecord;
 
-
 class ApiController extends AbstractController {
 
     /**
@@ -21,19 +20,15 @@ class ApiController extends AbstractController {
         $clientsRepo = $em->getRepository(Client::class);
 
         $clientRecord = new ClientRecord();
-        $clientRecord->setRecordDate($data->{'date'});
-        $clientRecord->setTemperature($data->{'measurements'}->{'temperature'});
-        $clientRecord->setAirPressure($data->{'measurements'}->{'pressure'});
-        $clientRecord->setHumidity($data->{'measurements'}->{'humidity'});
+        $clientRecord->setRecordDate(date_create($data['date']));
+        $clientRecord->setTemperature($data['measurements']['temperature']);
+        $clientRecord->setAirPressure($data['measurements']['pressure']);
+        $clientRecord->setHumidity($data['measurements']['humidity']);
+
         $em->persist($clientRecord);
         $em->flush();
 
-        return new JsonResponse(
-            [
-                'status' => 'ok',
-            ],
-            JsonResponse::HTTP_CREATED
-        );
+        return new JsonResponse(200);
     }
 
 }

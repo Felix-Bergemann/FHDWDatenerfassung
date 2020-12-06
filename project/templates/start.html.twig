@@ -1,52 +1,74 @@
 {% extends 'base.html.twig' %}
 {% block body %}
-<section class="p-4">
-        {% for client in clients %}
-        <div class="container">
-            <div class="jumbotron">
-                <div class="d-flex justify-content-around mb-2">
-                    <span class="alert-light border rounded m-2 p-2">
-                        <h3>Client {{client.name}}</h3>
-                    </span>
-                </div>
-                <div class="row">
-                    <div class="col-3"></div>
-                    {#{% if client.lastupdate == true %}
-                        <div class="col-6 m-2 text-center alert alert-success">
-                            <strong>Daten aktuell</strong>
-                        </div>
-                    {% else %}
-                        <div class="col-6 m-2 text-center alert alert-danger">
-                            <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
-                        </div>
-                    {% endif %}#}
-                    <div class="col-3"></div>
-                </div>
-                <div class="d-flex justify-content-around mb-3 p-1">
-                    {% for measuredValue in measuredValues %}
-                        <div class="text-center mb-2 p-1">
-                            <h4>{{measuredValue.name}}:</h4>
-                            <div class="col-10 alert alert-light p-1">
-                               {#} {% if measuredValue.name == "Temperatur" %}
-                                    {{client.temperature}}
-                                {% elseif measuredValue.name == "Luftdruck"%}
-                                    {{client.airpresure}}
-                                {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
-                                    {{client.humidity}}
-                                {% endif %}
-                                {{measuredValue.unit}}#}
+    <section class="p-4">
+        <form method="post" action="details">
+            {% for client in clients %}
+                {% for room in rooms %}
+                    {% if client.roomIk == room.intKey %}
+                        {% if ( client.owningUserIk == userIk or room.isPrivate == 0) %}
+                        <div class="container">
+                            <div class="jumbotron">
+                                <div class="d-flex justify-content-around mb-2">
+                                    <div class="alert-light border rounded m-2 p-2">
+                                        <h3>Client {{client.macAdress}}</h3>
+                                        <h4>aktueller Raum: {{room.roomName}}</h4>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3"></div>
+                                        {% for clientValue in currentClientValues %}
+                                            {% if clientValue.clientIk == client.intKey %}
+                                                {% if clientValue.recordDate > minDate %}
+                                                    <div class="col-6 m-2 text-center alert alert-success">
+                                                        <strong>Daten aktuell</strong>
+                                                    </div>
+                                                {% else %}
+                                                    <div class="col-6 m-2 text-center alert alert-danger">
+                                                        <strong> Achtung! </strong> Die ausgelesenen Daten sind nicht aktuell!
+                                                    </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endfor %}
+                                    <div class="col-3"></div>
+                                </div>
+                                <div class="d-flex justify-content-around mb-3 p-1">
+                                    {% for measuredValue in measuredValues %}
+                                        {% for clientValue in currentClientValues %}
+                                            {% if clientValue.clientIk == client.intKey %}
+                                            <div class="text-center mb-2 p-1">
+                                                <h4>{{measuredValue.name}}:</h4>
+                                                <div class="alert alert-light p-1">
+                                                    {% if measuredValue.name == "Temperatur" %}
+                                                            {{clientValue.temperature}}
+                                                    {% elseif measuredValue.name == "Luftdruck"%}
+                                                            {{clientValue.airPressure}}
+                                                    {% elseif measuredValue.name == "Luftfeuchtigkeit"%}
+                                                            {{clientValue.humidity}}
+                                                    {% endif %}
+                                                    {{measuredValue.unit}}
+                                                </div>
+                                                <h1>
+                                                    <i class="{{measuredValue.icon}}"></i>                                                </h1>
+                                                </h1>
+                                            </div>
+                                             {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                <form action="details" method="POST">
+                                    <div class="icon-input-btn text-center">
+                                        <input type="hidden" name="client" value="{{client.intKey}}">
+                                        <input type="hidden" name="room" value="{{room.intKey}}">
+                                        <button type="submit" class="btn btn-info btn-lg">Messverlauf anzeigen</i></button>
+                                    </div>
+                                </form>
                             </div>
-                            <a href="details">
-                                <h1>
-                                    <i class="{{measuredValue.icon}}"></i>
-                                </h1>
-                            </a>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <hr>
-        {% endfor %}
+                        <hr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </form>
     </section>
 {% endblock %}

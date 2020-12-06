@@ -2,20 +2,23 @@
 
 namespace App\Entity;
 
+use App\Repository\ClientRecordRepository;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * ClientRecord
  *
+ * @ORM\Entity(repositoryClass="App\Repository\ClientRecordRepository");
  * @ORM\Table(name="client_record")
  * @ORM\Entity
  */
 class ClientRecord
 {
     /**
-     * @var int|null
+     * @var int
      *
-     * @ORM\Column(name="int_key", type="integer", nullable=true)
+     * @ORM\Column(name="int_key", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -59,7 +62,7 @@ class ClientRecord
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="record_date", type="date", nullable=true)
+     * @ORM\Column(name="record_date", type="datetime", nullable=true)
      */
     private $recordDate;
 
@@ -128,9 +131,10 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate(): ?\DateTimeInterface
+    public function getRecordDate()
     {
-        return $this->recordDate;
+
+        return $this->recordDate->format("Y-m-d H:i:s");
     }
 
     public function setRecordDate(?\DateTimeInterface $recordDate): self
@@ -140,5 +144,9 @@ class ClientRecord
         return $this;
     }
 
+    public function getMeasurements(){
+        $measurements = [$this->temperature, $this->humidity, $this->airPressure, $this->recordDate];
+        return $measurements;
+    }
 
 }

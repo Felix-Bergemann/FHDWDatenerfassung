@@ -19,11 +19,17 @@ class ApiController extends AbstractController {
     public function getClientData(Request $request){
         $data=json_decode($request->getContent(),true);
         $em =  $this->getDoctrine()->getManager();
-        $clientsRepo = $em->getRepository(Client::class);
+        $clientRepo = $em->getRepository(Client::class);
 
         $clientRecord = new ClientRecord();
         $date = $data['date'];
         $date = date_create($date)->format('Y-m-d H:i:s');
+
+        $client = $clientRepo->findOneBy(['macAdress'=>$data['mac']]);
+        if($client){
+            $clientRecord->setClientIk($client->getIntKey());
+            $clientRecord->setRoomIk($client->getRoomIk());
+        }
         $clientRecord->setRecordDate($date);      
         $clientRecord->setTemperature($data['measurements']['temperature']);
         $clientRecord->setAirPressure($data['measurements']['pressure']);

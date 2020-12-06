@@ -61,12 +61,7 @@ class ClientRecord
 
     /**
      * @var \string|null
-     *
-<<<<<<< HEAD
-     * @ORM\Column(name="record_date", type="datetime", nullable=true)
-=======
      * @ORM\Column(name="record_date", type="text", nullable=true)
->>>>>>> e5776a7e068898f7e96111730bad5fa255de9afd
      */
     private $recordDate;
 

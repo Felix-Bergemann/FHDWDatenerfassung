@@ -60,14 +60,10 @@ class ClientRecord
     private $airPressure;
 
     /**
-     * @var \string|null
-     *
-<<<<<<< HEAD
-     * @ORM\Column(name="record_date", type="datetime", nullable=true)
-=======
-     * @ORM\Column(name="record_date", type="text", nullable=true)
->>>>>>> e5776a7e068898f7e96111730bad5fa255de9afd
-     */
+    * @var \string|null
+    *
+    * @ORM\Column(name="record_date", type="text", nullable=true)
+    */
     private $recordDate;
 
     public function getIntKey(): ?int

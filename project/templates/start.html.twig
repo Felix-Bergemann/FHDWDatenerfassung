@@ -47,19 +47,21 @@
                                                     {% endif %}
                                                     {{measuredValue.unit}}
                                                 </div>
-                                                <form action="details" method="POST">
-                                                    <div class="icon-input-btn">
-                                                        <input type="hidden" name="client" value="{{client.intKey}}_{{client.macAdress}}">
-                                                        <input type="hidden" name="measured" value="{{measuredValue.name}}">
-                                                        <input type="hidden" name="room" value="{{room.intKey}}_{{room.roomName}}">
-                                                        <button type="submit" class="btn btn-outline-light text-info btn-lg"><i class="{{measuredValue.icon}}"></i></button>
-                                                    </div>
-                                                </form>
+                                                <h1>
+                                                    <i class="{{measuredValue.icon}}"></i>                                                </h1>
+                                                </h1>
                                             </div>
                                              {% endif %}
                                         {% endfor %}
                                     {% endfor %}
                                 </div>
+                                <form action="details" method="POST">
+                                    <div class="icon-input-btn text-center">
+                                        <input type="hidden" name="client" value="{{client.intKey}}">
+                                        <input type="hidden" name="room" value="{{room.intKey}}">
+                                        <button type="submit" class="btn btn-info btn-lg">Messverlauf anzeigen</i></button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <hr>

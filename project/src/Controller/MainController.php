@@ -121,13 +121,13 @@ class MainController extends AbstractController
             $start->setIcon('fas fa-arrow-circle-left');
             $start->setLink('/start');
             $logout = new Nav();
-            $logout->setLink('/');
+            $logout->setLink('/logout');
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 
             $navs = [$start, $logout];
 
-            $clientKey = $_POST['client'];
+            $clientKey = $request->request->get('client');
 
             $em = $this->getDoctrine()->getManager();
             $clientRecordRepo = $em->getRepository(ClientRecord::class);

@@ -57,9 +57,9 @@ class ClientRecord
     private $airPressure;
 
     /**
-     * @var \DateTime|null
+     * @var \string|null
      *
-     * @ORM\Column(name="record_date", type="date", nullable=true)
+     * @ORM\Column(name="record_date", type="text", nullable=true)
      */
     private $recordDate;
 
@@ -128,12 +128,12 @@ class ClientRecord
         return $this;
     }
 
-    public function getRecordDate(): ?\DateTimeInterface
+    public function getRecordDate(): string
     {
         return $this->recordDate;
     }
 
-    public function setRecordDate(?\DateTimeInterface $recordDate): self
+    public function setRecordDate(string $recordDate): self
     {
         $this->recordDate = $recordDate;
 

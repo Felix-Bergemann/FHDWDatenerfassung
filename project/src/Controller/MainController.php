@@ -72,12 +72,12 @@ class MainController extends AbstractController
 
             // Erstellung von Navigationselementen
             $logout = new Nav();
-            $logout->setLink('/logout');
+            $logout->setLink('./logout');
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 
             $syncClient = new Nav();
-            $syncClient->setLink('/clients');
+            $syncClient->setLink('./clients');
             $syncClient->setText('Einstellungen');
             $syncClient->setIcon('fa fa-list');
 
@@ -137,9 +137,9 @@ class MainController extends AbstractController
             $start = new Nav();
             $start->setText('Zurück');
             $start->setIcon('fas fa-arrow-circle-left');
-            $start->setLink('/start');
+            $start->setLink('./start');
             $logout = new Nav();
-            $logout->setLink('/logout');
+            $logout->setLink('./logout');
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 
@@ -181,9 +181,9 @@ class MainController extends AbstractController
             $start = new Nav();
             $start->setText('Zurück');
             $start->setIcon('fas fa-arrow-circle-left');
-            $start->setLink('/start');
+            $start->setLink('./start');
             $logout = new Nav();
-            $logout->setLink('/logout');
+            $logout->setLink('./logout');
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 

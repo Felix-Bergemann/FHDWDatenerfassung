@@ -38,8 +38,10 @@
                             {% for client in clients %}
                                 {% if client.owningUserIk == userNo %}
                                 <div class="form-inline">
-                                        <label for="ownRooms" class="col-4 col-form-label">{{client.macAdress}}</label>
-                                        <select class="form-control container" name="ownRooms.{{client.intKey}}">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">{{client.macAdress}}</span>
+                                        </div>
+                                        <select class="form-control" name="ownRooms.{{client.intKey}}">
                                             {% for room in rooms %}
                                                 <option value="{{room.intKey}}" {% if room.intKey == client.roomIk %} selected {% endif %}>{{room.roomName}}</option>
                                             {% endfor %}

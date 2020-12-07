@@ -113,8 +113,9 @@ class MainController extends AbstractController
 
     public function chart(Builder $builder,string $value, string $bennenung,string $farbe, Request $request) {
         $builder
-            ->query('SELECT p.recordDate,p.'.$value.' FROM \App\Entity\ClientRecord p where p.clientIk=:client_key order by p.recordDate')
+            ->query('SELECT p.recordDate,p.'.$value.' FROM \App\Entity\ClientRecord p where p.clientIk=:client_key and p.roomIk=:client_room order by p.recordDate')
             ->setParameter(':client_key',$request->request->get('client'))
+            ->setParameter(':client_room',$request->request->get('room'))
             ->addDataset($value,$bennenung,[
                 "backgroundColor" => $farbe
             ])

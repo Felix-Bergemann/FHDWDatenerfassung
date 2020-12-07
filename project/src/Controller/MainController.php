@@ -187,10 +187,11 @@ class MainController extends AbstractController
             $logout->setText('Abmelden');
             $logout->setIcon('fas fa-window-close');
 
+            $userNo = $this->getUser()->getIntKey();
             $navs = [$start, $logout];
             // Selektierung der Datenwerte aus DB
-            $ownRooms = $roomRepo->findBy(['userIk' => $this->getUser()->getIntKey()]);
-            $userClients = $userClientRepo->findBy(['userIk'=>$this->getUser()->getIntKey()]);
+            $ownRooms = $roomRepo->findBy(['userIk' => $userNo]);
+            $userClients = $userClientRepo->findBy(['userIk'=>$userNo]);
             $userClientValues = [];
             foreach($userClients as $userClient){
                 array_push($userClientValues, $userClient->getClientIk());
@@ -198,10 +199,52 @@ class MainController extends AbstractController
             return $this->render('clients.html.twig', [
                 'clients'=> $clientRepo->findAll(),
                 'userClientsValues' => $userClientValues,
+                'userNo' => $userNo,
                 'rooms' => $ownRooms,
                 'navs' =>$navs,
             ]);
         }
+    }
+
+    /**
+     * @Route("/clientRoom", name="client_room")
+     */
+    public function changeClientRoomAction (Request $request){
+        $em = $em = $this->getDoctrine()->getManager();
+        $clientRepo = $em->getRepository(Client::class);
+        $curClient = $clientRepo->findOneBy(['macAdress'=>$request->request->get('client')]);
+        $roomValue= $request->request->get('ownRooms_'.$curClient->getIntKey());
+
+        if(!empty($curClient) &&!empty($roomValue)){
+            if($roomValue != $curClient->getRoomIk()){
+                $curClient->setRoomIk($roomValue);
+                $em->flush();
+            }
+        }
+
+        return $this->redirectToRoute('clients');
+    }
+
+    /**
+     * @Route("/createRoom", name="create_room")
+     */
+    public function createNewRoomAction (Request $request){
+        if($request->request->get('newRoomName')){
+            $em = $this->getDoctrine()->getManager();
+            $newRoom = new Room();
+            $newRoom->setRoomName($request->request->get('newRoomName'));
+            $newRoom->setUserIk($this->getUser()->getIntKey());
+            if($request->request->get('newRoomisPrivate')){
+                $newRoom->setIsPrivate(1);
+            }else{
+                $newRoom->setIsPrivate(0);
+            }
+
+            $em->persist($newRoom);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('clients');
     }
 
     /**

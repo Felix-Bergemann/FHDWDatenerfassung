@@ -13,6 +13,7 @@ use App\Entity\ClientRecord;
 use App\Entity\Room;
 use App\Entity\UserClient;
 use App\Repository\ClientRecordRepository;
+use App\Repository\ClientsRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Mukadi\Chart\Utils\RandomColorFactory;
 use Mukadi\ChartJSBundle\Chart\Builder;
@@ -33,7 +34,6 @@ class MainController extends AbstractController
         }else{
             return $this->render('login.html.twig', [
                 'error' =>$authenticationUtils->getLastAuthenticationError(),
-                'navs' => [],
             ]);
         }
     }
@@ -48,8 +48,10 @@ class MainController extends AbstractController
             return $this->redirectToRoute('app_login');
         }else{
             $em = $this->getDoctrine()->getManager();
-            $clientRepo = $em->getRepository(Client::class);
             $roomRepo =$em->getRepository(Room::class);
+            $userClientRepo = $em->getRepository(UserClient::class);
+            $clientRepo = new ClientsRepository($registry);
+            $crRepo = new ClientRecordRepository($registry);
 
             // Erstellung von Objekten zur Messwertdarstellung
             $temperature = new Measured();
@@ -84,16 +86,18 @@ class MainController extends AbstractController
             $navs = [$syncClient, $logout];
 
             // Auslesen der Daten aus DB in Objekte
-            $clients = $clientRepo->findAll();
             $rooms = $roomRepo->findAll();
+            $userClients = $userClientRepo->findBy(['userIk'=>$this->getUser()->getIntKey()]);
 
+            $clients = $clientRepo->findClientsWithUserClients($userClients);
             // Aktuelle Werte Clients holen
             $currentClientRecords = [] ;
-            $crRepo = new ClientRecordRepository($registry);
 
-            foreach($clients as $client){
-                if (!empty($crRepo->getMaxDateEntry($client->getIntKey()))){
-                    array_push($currentClientRecords, $crRepo->getMaxDateEntry($client->getIntKey()));
+            if (!empty($clients)){
+                foreach($clients as $client){
+                    if (!empty($crRepo->getMaxDateEntry($client->getIntKey(), $client->getRoomIk()))){
+                        array_push($currentClientRecords, $crRepo->getMaxDateEntry($client->getIntKey(),$client->getRoomIk()));
+                    }
                 }
             }
 

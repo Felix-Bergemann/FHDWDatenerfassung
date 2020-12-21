@@ -19,6 +19,26 @@ class ClientsRepository extends ServiceEntityRepository
         parent::__construct($registry, Client::class);
     }
 
+    /**
+     *
+     */
+    public function findClientsWithUserClients($userClients){
+        $clientKeys = [];
+        foreach($userClients as $userClient){
+            array_push($clientKeys, $userClient->getClientIk());
+        }
+        if(!empty($clientKeys)){
+            $qb = $this->createQueryBuilder('u');
+            $qb->where($qb->expr()->in('u.intKey', $clientKeys));
+            $query = $qb->getQuery();
+
+            return $query->execute();
+        }else{
+            return null;
+        }
+
+    }
+
     // /**
     //  * @return Client[] Returns an array of Client objects
     //  */

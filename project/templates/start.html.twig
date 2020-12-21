@@ -1,11 +1,13 @@
 {% extends 'base.html.twig' %}
 {% block body %}
+{% set noClients = true %}
     <section class="p-4">
         <form method="post" action="details">
             {% for client in clients %}
                 {% for room in rooms %}
                     {% if client.roomIk == room.intKey %}
                         {% if ( client.owningUserIk == userIk or room.isPrivate == 0) %}
+                        {% set noClients = false %}
                         <div class="container">
                             <div class="jumbotron">
                                 <div class="d-flex justify-content-around mb-2">
@@ -69,6 +71,15 @@
                     {% endif %}
                 {% endfor %}
             {% endfor %}
+            {% if noClients == true %}
+                <div class="jumbotron">
+                    <div class="d-flex justify-content-around mb-2">
+                        <div class="alert-info border rounded m-2 p-2">
+                            <b>Aktuell sind keine Clients dem User zugeschaltet. Bitte überprüfen Sie Ihre Einstellungen.</b>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
         </form>
     </section>
 {% endblock %}

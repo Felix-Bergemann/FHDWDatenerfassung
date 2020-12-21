@@ -11,31 +11,30 @@
             <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
         {% endblock %}
     </head>
-    
-    <body>
 
+    <body>
         <header>
             <nav class="navbar bg-dark navbar-dark">
               <!-- Brand -->
-              <a class="navbar-brand" href="#">FHDW-Datenerfassung</a>
 
+              <a class="navbar-brand" href="#">FHDW-Datenerfassung</a>
+              {% if navs is defined%}
               <!-- Toggler/collapsibe Button -->
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                 <span class="navbar-toggler-icon"></span>
               </button>
 
-              <!-- Navbar links -->
+              <!-- Navbar -->
               <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                  {% if navs is defined%}
-                    {% for nav in navs %}
-                       <li class="nav-item">
-                            <a class="nav-link" href="{{nav.link}}"><i class="{{nav.icon}}"></i>{{nav.text}}</a>
-                      </li>
-                    {% endfor %}
-                  {% endif %}
-                </ul>
+                  {% for nav in navs %}
+                    <ul class="navbar-nav">
+                          <li class="nav-item">
+                                <a class="nav-link" href="{{nav.link}}"><i class="{{nav.icon}}"></i>{{nav.text}}</a>
+                          </li>
+                        {% endfor %}
+                    </ul>
               </div>
+              {% endif %}
             </nav>
         </header>
 

@@ -34,7 +34,6 @@ class MainController extends AbstractController
         }else{
             return $this->render('login.html.twig', [
                 'error' =>$authenticationUtils->getLastAuthenticationError(),
-                'navs' => [],
             ]);
         }
     }

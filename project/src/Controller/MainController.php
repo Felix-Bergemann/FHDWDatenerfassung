@@ -95,8 +95,8 @@ class MainController extends AbstractController
 
             if (!empty($clients)){
                 foreach($clients as $client){
-                    if (!empty($crRepo->getMaxDateEntry($client->getIntKey()))){
-                        array_push($currentClientRecords, $crRepo->getMaxDateEntry($client->getIntKey()));
+                    if (!empty($crRepo->getMaxDateEntry($client->getIntKey(), $client->getRoomIk()))){
+                        array_push($currentClientRecords, $crRepo->getMaxDateEntry($client->getIntKey(),$client->getRoomIk()));
                     }
                 }
             }

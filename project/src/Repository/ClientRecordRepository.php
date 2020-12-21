@@ -21,23 +21,30 @@ class ClientRecordRepository extends ServiceEntityRepository
     }
 
     /**
+
      * @return ClientRecord
+
      */
-    public function getMaxDateEntry($clientNo): ?ClientRecord
+
+    public function getMaxDateEntry($clientNo, $roomNo): ?ClientRecord
     {
         $subQb = $this->createQueryBuilder('sq')
-        ->where('sq.clientIk= :clientNo')
+        ->where('sq.clientIk= :clientNo and sq.roomIk = :roomNo')
         ->setParameter('clientNo', $clientNo)
+	    ->setParameter('roomNo', $roomNo)
         ->select('MAX(sq.recordDate) AS maxDate')
         ->getQuery();
-        $subQbResult= $subQb->getSingleResult();
 
+        $subQbResult= $subQb->getSingleResult();
         $qb = $this->createQueryBuilder('mr')
         ->where('mr.clientIk= :clientNo')
+	    ->andWhere('mr.roomIk = :roomNo')
         ->andWhere('mr.recordDate = :maxDate')
         ->setParameter('clientNo', $clientNo)
+	    ->setParameter('roomNo', $roomNo)
         ->setParameter('maxDate', $subQbResult['maxDate'])
         ->getQuery();
+
         try{
             $result =$qb->getSingleResult();
         }catch(NoResultException $nre){
@@ -45,7 +52,9 @@ class ClientRecordRepository extends ServiceEntityRepository
         }
 
         return $result;
+
     }
+
 
     // /**
     //  * @return ClientRecord[] Returns an array of ClientRecord objects

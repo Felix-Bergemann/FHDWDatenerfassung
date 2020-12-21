@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 {% set noClients = true %}
+{% set valueExist = false %}
     <section class="p-4">
         <form method="post" action="details">
             {% for client in clients %}
@@ -36,7 +37,9 @@
                                 <div class="d-flex justify-content-around mb-3 p-1">
                                     {% for measuredValue in measuredValues %}
                                         {% for clientValue in currentClientValues %}
+                                        {% set valueExist = false %}
                                             {% if clientValue.clientIk == client.intKey %}
+                                            {% set valueExist = true %}
                                             <div class="text-center mb-2 p-1">
                                                 <h4>{{measuredValue.name}}:</h4>
                                                 <div class="alert alert-light p-1">
@@ -57,6 +60,11 @@
                                         {% endfor %}
                                     {% endfor %}
                                 </div>
+                                {% if valueExist == false %}
+                                    <div class="col-6 text-center alert alert-warning container-fluid">
+                                        <strong>Achtung es sind aktuell noch keine Daten erfasst worden.</strong>
+                                    </div>
+                                {% else %}
                                 <form action="details" method="POST">
                                     <div class="icon-input-btn text-center">
                                         <input type="hidden" name="client" value="{{client.intKey}}">
@@ -64,6 +72,7 @@
                                         <button type="submit" class="btn btn-info btn-lg">Messverlauf anzeigen</i></button>
                                     </div>
                                 </form>
+                                {% endif %}
                             </div>
                         </div>
                         <hr>

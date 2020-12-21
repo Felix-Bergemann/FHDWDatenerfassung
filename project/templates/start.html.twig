@@ -5,6 +5,7 @@
     <section class="p-4">
         <form method="post" action="details">
             {% for client in clients %}
+            {% set valueExist = false %}
                 {% for room in rooms %}
                     {% if client.roomIk == room.intKey %}
                         {% if ( client.owningUserIk == userIk or room.isPrivate == 0) %}
@@ -37,7 +38,6 @@
                                 <div class="d-flex justify-content-around mb-3 p-1">
                                     {% for measuredValue in measuredValues %}
                                         {% for clientValue in currentClientValues %}
-                                        {% set valueExist = false %}
                                             {% if clientValue.clientIk == client.intKey %}
                                             {% set valueExist = true %}
                                             <div class="text-center mb-2 p-1">

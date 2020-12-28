@@ -9,16 +9,13 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use App\Entity\Nav;
 use App\Entity\Measured;
 use App\Entity\Client;
-use App\Entity\ClientRecord;
 use App\Entity\Room;
 use App\Entity\UserClient;
 use App\Repository\ClientRecordRepository;
 use App\Repository\ClientsRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Mukadi\Chart\Utils\RandomColorFactory;
 use Mukadi\ChartJSBundle\Chart\Builder;
 use Mukadi\Chart\Chart;
-use Symfony\Component\Validator\Constraints\DateTime;
 
 
 class MainController extends AbstractController
